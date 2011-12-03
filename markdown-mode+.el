@@ -36,6 +36,25 @@
   :group 'markdown
   :type 'string)
 
+(defcustom markdown-latex-command "pandoc -s --mathjax -t latex"
+  "Command to output LaTeX from Markdown."
+  :group 'markdown
+  :type 'string)
+
+;;;###autoload
+(defun markdown-export-latex ()
+  "Output the Markdown file as LaTeX"
+  (interactive)
+  (let ((output-file (markdown-export-file-name ".tex")))
+    (when output-file
+      (let ((output-buffer-name (buffer-name (find-file-noselect output-file)))
+            (markdown-command markdown-latex-command))
+        (markdown output-buffer-name)
+        (with-current-buffer output-buffer-name
+          (save-buffer)
+          (kill-buffer output-buffer-name))
+        output-file))))
+
 
 ;;;###autoload
 (defun markdown-copy-rtf ()
