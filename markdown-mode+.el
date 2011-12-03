@@ -26,100 +26,29 @@
 
 ;;; Code:
 
-(defcustom markdown-copy-command "pbcopy"
-  "Command that takes data as input and copies it to the clipboard."
-  :group 'markdown
-  :type 'string)
-
-
 (defcustom markdown-rtf-command "pandoc -s -t rtf"
   "Command to generate RTF from Markdown"
   :group 'markdown
   :type 'string)
 
-(defcustom markdown-latex-command "pandoc -s --mathjax -t latex"
-  "Command to output LaTeX from Markdown, output filename is appended."
+(defcustom markdown-copy-command "pbcopy"
+  "Command to copy directory to the clipboard and interpret MIME type."
   :group 'markdown
   :type 'string)
 
-(defun markdown--cleanup-list-numbers-level (&optional pfx)
-  "Update the numbering for pfx (as a string of spaces).
-
-Assume that the previously found match was for a numbered item in a list."
-  (let ((m pfx)
-        (idx 0)
-        (success t))
-    (while (and success
-                (not (string-prefix-p "#" (match-string-no-properties 1)))
-                (not (string< (setq m (match-string-no-properties 2)) pfx)))
-      (cond
-       ((string< pfx m)
-        (setq success (markdown--cleanup-list-numbers-level m)))
-       (success
-        (replace-match
-         (concat pfx (number-to-string  (setq idx (1+ idx))) ". "))
-        (setq success
-              (re-search-forward
-               (concat "\\(^#+\\|\\(^\\|^[\s-]*\\)[0-9]+\\. \\)") nil t)))))
-    success))
-
-;;;###autoload
-(defun markdown-cleanup-list-numbers ()
-  "Update the numbering of numbered markdown lists"
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward (concat "\\(\\(^[\s-]*\\)[0-9]+\\. \\)") nil t)
-      (markdown--cleanup-list-numbers-level (match-string-no-properties 2)))))
-
-;;;###autoload
-(defun markdown-export-latex ()
-  "Output the Markdown file as LaTeX"
-  (interactive)
-  (let ((output-file
-         (concat
-          (or
-           (file-name-sans-extension (buffer-file-name))
-           (buffer-name)) ".tex")))
-    (when output-file
-      (let ((output-buffer-name (buffer-name (find-file-noselect output-file)))
-            (markdown-command markdown-latex-command))
-        (flet ((markdown-output-standalone-p () t))
-          (markdown output-buffer-name))
-        (with-current-buffer output-buffer-name
-          (save-buffer)
-          (kill-buffer output-buffer-name))
-        output-file))))
-
-(defun shell-command-on-region-to-string (start end command)
-  (save-window-excursion
-    (with-output-to-string
-      (shell-command-on-region start end command standard-output))))
-
-;;;###autoload
-(defun markdown-copy-html ()
-  "process file with multimarkdown and save it accordingly"
-  (interactive)
-  (save-window-excursion
-    (flet ((markdown-output-standalone-p () t))
-      (markdown))
-    (with-current-buffer markdown-output-buffer-name
-      (kill-ring-save (point-min) (point-max)))))
 
 ;;;###autoload
 (defun markdown-copy-rtf ()
   "render markdown and copy as RTF"
   (interactive)
   (save-window-excursion
-    (flet ((markdown-output-standalone-p () t))
-      (let ((markdown-command markdown-rtf-command))
-        (message (prin1-to-string (markdown-output-standalone-p)))
-        (markdown)
-        (with-current-buffer markdown-output-buffer-name
-          (shell-command-on-region
-           (point-min)
-           (point-max)
-           markdown-copy-command))))))
+    (let ((markdown-command markdown-rtf-command))
+      (markdown)
+      (with-current-buffer markdown-output-buffer-name
+        (shell-command-on-region
+         (point-min)
+         (point-max)
+         markdown-copy-command)))))
 
 ;;;###autoload
 (defun markdown-copy-paste-html ()
