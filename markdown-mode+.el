@@ -4,7 +4,7 @@
 
 ;; Author: Donald Ephraim Curtis
 ;; URL: http://github.com/milkypostman/markdown-mode+.el
-;; Version: 1
+;; Version:1
 ;; Keywords: markdown, latex, osx, rtf
 
 ;;; License:
@@ -54,7 +54,7 @@ Assume that the previously found match was for a numbered item in a list."
                 (not (string< (setq m (match-string-no-properties 2)) pfx)))
       (cond
        ((string< pfx m)
-        (setq success (markdown-cleanup-list-numbers-level m)))
+        (setq success (markdown--cleanup-list-numbers-level m)))
        (success
         (replace-match
          (concat pfx (number-to-string  (setq idx (1+ idx))) ". "))
@@ -68,7 +68,7 @@ Assume that the previously found match was for a numbered item in a list."
   "Update the numbering of numbered markdown lists"
   (interactive)
   (save-excursion
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (while (re-search-forward (concat "\\(\\(^[\s-]*\\)[0-9]+\\. \\)") nil t)
       (markdown--cleanup-list-numbers-level (match-string-no-properties 2)))))
 
@@ -122,7 +122,7 @@ Assume that the previously found match was for a numbered item in a list."
            markdown-copy-command))))))
 
 ;;;###autoload
-(defun markdown-copy-and-paste-html ()
+(defun markdown-copy-paste-html ()
   "process file with multimarkdown, copy it to the clipboard, and
   paste in safari's selected textarea"
   (interactive)
@@ -135,7 +135,7 @@ Assume that the previously found match was for a numbered item in a list."
         (save-buffer)
         (with-temp-buffer
           (insert-file-contents-literally metafn)
-          (beginning-of-buffer)
+          (goto-char (point-min))
           (do-applescript
            (concat
             "tell application \""
