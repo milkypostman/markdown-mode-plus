@@ -4,7 +4,7 @@
 
 ;; Author: Donald Ephraim Curtis
 ;; URL: http://github.com/milkypostman/markdown-mode+.el
-;; Version:1
+;; Version: 0.8
 ;; Keywords: markdown, latex, osx, rtf
 
 ;;; License:
@@ -41,6 +41,7 @@
   :group 'markdown
   :type 'string)
 
+
 ;;;###autoload
 (defun markdown-export-latex ()
   "Output the Markdown file as LaTeX"
@@ -55,6 +56,20 @@
           (kill-buffer output-buffer-name))
         output-file))))
 
+
+;;;###autoload
+(defun markdown-export-pdf ()
+  "Output the Markdown file as LaTeX"
+  (interactive)
+  (save-window-excursion
+    (markdown-export-latex)
+    (let ((output-buffer-name (concat "*" (markdown-export-file-name "") "*")))
+      (shell-command (concat "pdflatex" " --synctex=1 -interaction=nonstopmode "
+                             (shell-quote-argument
+                              (markdown-export-file-name ".tex")))
+                     output-buffer-name)
+      ))
+  )
 
 ;;;###autoload
 (defun markdown-copy-rtf ()
