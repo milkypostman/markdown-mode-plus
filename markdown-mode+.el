@@ -6,6 +6,7 @@
 ;; URL: http://github.com/milkypostman/markdown-mode+.el
 ;; Version: 0.8
 ;; Keywords: markdown, latex, osx, rtf
+;; Package-Requires: ((markdown-mode "20111229"))
 
 ;;; License:
 
