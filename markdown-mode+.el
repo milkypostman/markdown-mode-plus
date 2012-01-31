@@ -68,9 +68,7 @@
       (shell-command (concat "pdflatex" " --synctex=1 -interaction=nonstopmode "
                              (shell-quote-argument
                               (markdown-export-file-name ".tex")))
-                     output-buffer-name)
-      ))
-  )
+                     output-buffer-name))))
 
 ;;;###autoload
 (defun markdown-copy-rtf ()
