@@ -49,7 +49,8 @@
   (interactive)
   (let ((output-file (markdown-export-file-name ".tex")))
     (when output-file
-      (let ((output-buffer-name (buffer-name (find-file-noselect output-file)))
+      (let ((output-buffer-name (buffer-name
+                                 (find-file-noselect output-file n t)))
             (markdown-command markdown-latex-command))
         (markdown output-buffer-name)
         (with-current-buffer output-buffer-name
