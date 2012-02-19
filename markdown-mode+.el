@@ -50,7 +50,7 @@
   (let ((output-file (markdown-export-file-name ".tex")))
     (when output-file
       (let ((output-buffer-name (buffer-name
-                                 (find-file-noselect output-file n t)))
+                                 (find-file-noselect output-file nil t)))
             (markdown-command markdown-latex-command))
         (markdown output-buffer-name)
         (with-current-buffer output-buffer-name
