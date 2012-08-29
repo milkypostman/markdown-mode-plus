@@ -76,6 +76,19 @@
   "Render markdown and copy as RTF."
   (interactive)
   (save-window-excursion
+(defun markdown-code-copy (begin end)
+  "Copy region from BEGIN to END to the clipboard with four spaces indenteded on each line.
+
+Taken from
+http://stackoverflow.com/questions/3519244/emacs-command-to-indent-code-by-4-spaces-to-format-for-paste-into-stackoverflow."
+  (interactive "r")
+  (let ((buffer (current-buffer)))
+    (with-temp-buffer
+      (insert-buffer-substring-no-properties buffer begin end)
+      (indent-rigidly (point-min) (point-max) 4)
+      (clipboard-kill-ring-save (point-min) (point-max)))))
+
+;;;###autoload
     (let ((markdown-command markdown-rtf-command))
       (markdown)
       (with-current-buffer markdown-output-buffer-name
