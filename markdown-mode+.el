@@ -45,7 +45,7 @@
 
 ;;;###autoload
 (defun markdown-export-latex ()
-  "Output the Markdown file as LaTeX"
+  "Output the Markdown file as LaTeX."
   (interactive)
   (let ((output-file (markdown-export-file-name ".tex")))
     (when output-file
@@ -61,7 +61,7 @@
 
 ;;;###autoload
 (defun markdown-export-pdf ()
-  "Output the Markdown file as LaTeX"
+  "Output the Markdown file as LaTeX."
   (interactive)
   (save-window-excursion
     (markdown-export-latex)
@@ -73,7 +73,7 @@
 
 ;;;###autoload
 (defun markdown-copy-rtf ()
-  "render markdown and copy as RTF"
+  "Render markdown and copy as RTF."
   (interactive)
   (save-window-excursion
     (let ((markdown-command markdown-rtf-command))
@@ -86,8 +86,7 @@
 
 ;;;###autoload
 (defun markdown-copy-paste-html ()
-  "process file with multimarkdown, copy it to the clipboard, and
-  paste in safari's selected textarea"
+  "Process file with multimarkdown, copy it to the clipboard, and paste in safari's selected textarea."
   (interactive)
   (markdown-copy-html)
   (do-applescript
