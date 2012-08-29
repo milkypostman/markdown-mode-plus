@@ -77,7 +77,7 @@
 
 
 ;;;###autoload
-(defun markdown-pandoc-export-pdf ()
+(defun markdown-export-pandoc-pdf ()
   "Output the Markdown file as LaTeX."
   (interactive)
   (let ((output-file (markdown-export-file-name ".pdf")))
