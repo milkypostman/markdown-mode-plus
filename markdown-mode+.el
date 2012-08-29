@@ -42,6 +42,10 @@
   :group 'markdown
   :type 'string)
 
+(defcustom markdown-pandoc-pdf-command "pandoc -s --mathjax"
+  "Command to output LaTeX from Markdown."
+  :group 'markdown
+  :type 'string)
 
 ;;;###autoload
 (defun markdown-export-latex ()
@@ -71,11 +75,22 @@
                               (markdown-export-file-name ".tex")))
                      output-buffer-name))))
 
+
 ;;;###autoload
-(defun markdown-copy-rtf ()
-  "Render markdown and copy as RTF."
+(defun markdown-pandoc-export-pdf ()
+  "Output the Markdown file as LaTeX."
   (interactive)
-  (save-window-excursion
+  (let ((output-file (markdown-export-file-name ".pdf")))
+    (when output-file
+      (let ((output-buffer-name (buffer-name
+                                 (find-file-noselect output-file nil t)))
+            (markdown-command (concat markdown-pandoc-pdf-command
+                                      " -o " output-file)))
+        (markdown output-buffer-name)
+        output-file))))
+
+
+;;;###autoload
 (defun markdown-code-copy (begin end)
   "Copy region from BEGIN to END to the clipboard with four spaces indenteded on each line.
 
@@ -89,6 +104,10 @@ http://stackoverflow.com/questions/3519244/emacs-command-to-indent-code-by-4-spa
       (clipboard-kill-ring-save (point-min) (point-max)))))
 
 ;;;###autoload
+(defun markdown-copy-rtf ()
+  "Render markdown and copy as RTF."
+  (interactive)
+  (save-window-excursion
     (let ((markdown-command markdown-rtf-command))
       (markdown)
       (with-current-buffer markdown-output-buffer-name
