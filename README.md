@@ -1,5 +1,7 @@
 # markdown-mode+
 
+**DEPRECATED:** This package is not currently used by the maintainer and has an [active issue](https://github.com/milkypostman/markdown-mode-plus/issues/4) with undefined functions, so it seems reasonable to deprecated the package and remove it from MELPA. If the package gets updates in the future it will get un-deprecated and put back in to circulation.
+
 Additional functions for Emacs [markdown-mode].  Default support for
 [pandoc].  Much of the functionality is tailored to OS X, with the end
 goal to extend `markdown-mode` in useful ways for all platforms.
